@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.unigrid</groupId>
+    <artifactId>pax-sdk</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
+    <dependencies>
+            <!-- gRPC dependencies -->
+		<dependency>
+			<groupId>com.google.api.grpc</groupId>
+			<artifactId>proto-google-common-protos</artifactId>
+			<version>2.30.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-netty</artifactId>
+			<version>1.45.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-protobuf</artifactId>
+			<version>1.45.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-stub</artifactId>
+			<version>1.45.0</version>
+		</dependency>
+                <dependency>
+			<groupId>org.bitcoinj</groupId>
+			<artifactId>bitcoinj-core</artifactId>
+			<version>0.16.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.bouncycastle</groupId>
+					<artifactId>bcprov-jdk15on</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.google.protobuf</groupId>
+					<artifactId>protobuf-javalite</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+                <dependency>
+			<groupId>jakarta.annotation</groupId>
+			<artifactId>jakarta.annotation-api</artifactId>
+			<version>2.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java-util</artifactId>
+			<version>3.24.4</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.enterprise</groupId>
+			<artifactId>jakarta.enterprise.cdi-api</artifactId>
+			<version>4.0.1</version>
+			<type>jar</type>
+		</dependency>
+                <dependency>
+			<groupId>org.jboss.weld.se</groupId>
+			<artifactId>weld-se-core</artifactId>
+			<version>5.1.2.Final</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.30</version>
+			<type>jar</type>
+		</dependency>
+                <dependency>
+			<groupId>org.web3j</groupId>
+			<artifactId>crypto</artifactId>
+			<version>5.0.0</version>
+			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-databind</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+    </dependencies>
+    <build>
+                <extensions>
+			<extension>
+				<groupId>kr.motd.maven</groupId>
+				<artifactId>os-maven-plugin</artifactId>
+				<version>1.6.2</version>
+			</extension>
+                </extensions>
+                <plugins>
+                        <plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.6.0</version>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<archive>
+						<manifest>
+							<mainClass>org.unigrid.faucetbot.UnigridFaucetBot</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+                        <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<id>download-files</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<mkdir dir="${project.build.directory}/proto/cosmos/bank/v1beta1"/>
+								<mkdir dir="${project.build.directory}/proto/cosmos/base/v1beta1"/>
+								<mkdir dir="${project.build.directory}/proto/amino"/>
+								<mkdir dir="${project.build.directory}/proto/cosmos/query/v1"/>
+								<mkdir dir="${project.build.directory}/proto/cosmos/crypto/multisig/v1beta1"/>
+								<mkdir dir="${project.build.directory}/proto/cosmos/tx/signing/v1beta1"/>
+								<mkdir dir="${project.build.directory}/proto/cosmos_proto"/>
+								<mkdir dir="${project.build.directory}/proto/cosmos/msg/v1"/>
+								<mkdir dir="${project.build.directory}/proto/cosmos/base/query/v1beta1"/>
+								<mkdir dir="${project.build.directory}/proto/gridnode/gridnode/v1"/>	
+								<mkdir dir="${project.build.directory}/proto/gogoproto"/>
+								<mkdir dir="${project.build.directory}/proto/cosmos/staking/v1beta1"/>
+								<mkdir dir="${project.build.directory}/proto/cosmos/tx/v1beta1"/>
+								<mkdir dir="${project.build.directory}/proto/cosmos/base/abci/v1beta1"/>
+								<mkdir dir="${project.build.directory}/proto/tendermint/crypto"/>
+								<mkdir dir="${project.build.directory}/proto/tendermint/types"/>
+								<mkdir dir="${project.build.directory}/proto/tendermint/abci"/>
+								<mkdir dir="${project.build.directory}/proto/tendermint/version"/>
+								<mkdir dir="${project.build.directory}/proto/cosmos/crypto/secp256k1"/>
+								<mkdir dir="${project.build.directory}/proto/cosmos/auth/v1beta1"/>
+								<mkdir dir="${project.build.directory}/proto/cosmos/vesting/v1beta1"/>
+								<mkdir dir="${project.build.directory}/proto/ibc/core/client/v1/"/>
+								<mkdir dir="${project.build.directory}/proto/ibc/lightclients/solomachine/v1/"/>
+								<mkdir dir="${project.build.directory}/proto/ibc/applications/transfer/v1/"/>
+								<mkdir dir="${project.build.directory}/proto/ibc/core/channel/v1/"/>
+								<mkdir dir="${project.build.directory}/proto/cosmos/distribution/v1beta1/"/>
+								<mkdir dir="${project.build.directory}/proto/cosmos/tx/v1beta1/"/>
+								<mkdir dir="${project.build.directory}/proto/ibc/lightclients/tendermint/v1/"/>
+								<mkdir dir="${project.build.directory}/proto/cosmos/gov/v1beta1/"/>
+								<mkdir dir="${project.build.directory}/proto/cosmos/crypto/multisig/"/>
+								<mkdir dir="${project.build.directory}/proto/cosmos/upgrade/v1beta1/"/>
+								<mkdir dir="${project.build.directory}/proto/ibc/core/connection/v1/"/>
+								<mkdir dir="${project.build.directory}/proto/ibc/core/commitment/v1/"/>
+								<mkdir dir="${project.build.directory}/proto/cosmos/gov/v1beta1/"/>
+								
+								
+								
+							
+								<get src="https://raw.githubusercontent.com/cloverzrg/cosmos-sdk-java/main/src/main/java/proto/ibc/core/client/v1/tx.proto"
+								     dest="${project.build.directory}/proto/ibc/core/client/v1/"
+								     verbose="false"
+								     usetimestamp="true"/>	
+									
+								<get src="https://raw.githubusercontent.com/cloverzrg/cosmos-sdk-java/main/src/main/java/proto/cosmos/distribution/v1beta1/tx.proto"
+								     dest="${project.build.directory}/proto/cosmos/distribution/v1beta1/"
+								     verbose="false"
+								     usetimestamp="true"/>
+									
+								<get src="https://raw.githubusercontent.com/cloverzrg/cosmos-sdk-java/main/src/main/java/proto/cosmos/gov/v1beta1/gov.proto"
+								     dest="${project.build.directory}/proto/cosmos/gov/v1beta1/"
+								     verbose="false"
+								     usetimestamp="true"/>	
+							
+								<get src="https://raw.githubusercontent.com/cloverzrg/cosmos-sdk-java/main/src/main/java/proto/proofs.proto"
+								     dest="${project.build.directory}/proto/"
+								     verbose="false"
+								     usetimestamp="true"/>	
+								
+								<get src="https://raw.githubusercontent.com/cloverzrg/cosmos-sdk-java/main/src/main/java/proto/ibc/core/commitment/v1/commitment.proto"
+								     dest="${project.build.directory}/proto/ibc/core/commitment/v1/"
+								     verbose="false"
+								     usetimestamp="true"/>	
+								
+								<get src="https://raw.githubusercontent.com/cloverzrg/cosmos-sdk-java/main/src/main/java/proto/ibc/core/connection/v1/connection.proto"
+								     dest="${project.build.directory}/proto/ibc/core/connection/v1/"
+								     verbose="false"
+								     usetimestamp="true"/>	
+								
+								<get src="https://raw.githubusercontent.com/cloverzrg/cosmos-sdk-java/main/src/main/java/proto/ibc/core/channel/v1/channel.proto"
+								     dest="${project.build.directory}/proto/ibc/core/channel/v1"
+								     verbose="false"
+								     usetimestamp="true"/>
+																	
+								<get src="https://raw.githubusercontent.com/cloverzrg/cosmos-sdk-java/main/src/main/java/proto/cosmos/upgrade/v1beta1/upgrade.proto"
+								     dest="${project.build.directory}/proto/cosmos/upgrade/v1beta1/"
+								     verbose="false"
+								     usetimestamp="true"/>
+							
+								<get src="https://raw.githubusercontent.com/cloverzrg/cosmos-sdk-java/main/src/main/java/proto/cosmos/crypto/multisig/keys.proto"
+								     dest="${project.build.directory}/proto/cosmos/crypto/multisig/"
+								     verbose="false"
+								     usetimestamp="true"/>
+							
+								<get src="https://raw.githubusercontent.com/cloverzrg/cosmos-sdk-java/main/src/main/java/proto/cosmos/gov/v1beta1/tx.proto"
+								     dest="${project.build.directory}/proto/cosmos/gov/v1beta1/"
+								     verbose="false"
+								     usetimestamp="true"/>
+							
+								<get src="https://raw.githubusercontent.com/cloverzrg/cosmos-sdk-java/main/src/main/java/proto/ibc/lightclients/tendermint/v1/tendermint.proto"
+								     dest="${project.build.directory}/proto/ibc/lightclients/tendermint/v1/"
+								     verbose="false"
+								     usetimestamp="true"/>
+							
+								<get src="https://raw.githubusercontent.com/cloverzrg/cosmos-sdk-java/main/src/main/java/cosmos/distribution/v1beta1/Tx.java"
+								     dest="${project.build.directory}/proto/cosmos/tx/v1beta1/"
+								     verbose="false"
+								     usetimestamp="true"/>
+								
+								
+								<get src="https://raw.githubusercontent.com/cloverzrg/cosmos-sdk-java/main/src/main/java/proto/ibc/core/client/v1/query.proto"
+								     dest="${project.build.directory}/proto/ibc/core/client/v1/"
+								     verbose="false"
+								     usetimestamp="true"/>
+								
+								<get src="https://raw.githubusercontent.com/cloverzrg/cosmos-sdk-java/main/src/main/java/proto/ibc/core/client/v1/genesis.proto"
+								     dest="${project.build.directory}/proto/ibc/core/client/v1/"
+								     verbose="false"
+								     usetimestamp="true"/>
+								
+								<get src="https://raw.githubusercontent.com/cloverzrg/cosmos-sdk-java/main/src/main/java/proto/ibc/applications/transfer/v1/tx.proto"
+								     dest="${project.build.directory}/proto/ibc/applications/transfer/v1/"
+								     verbose="false"
+								     usetimestamp="true"/>
+								
+								
+								<get src="https://raw.githubusercontent.com/cloverzrg/cosmos-sdk-java/main/src/main/java/proto/ibc/core/channel/v1/tx.proto"
+								     dest="${project.build.directory}/proto/ibc/core/channel/v1/"
+								     verbose="false"
+								     usetimestamp="true"/>
+							
+								<get src="https://raw.githubusercontent.com/cloverzrg/cosmos-sdk-java/main/src/main/java/proto/ibc/lightclients/solomachine/v1/solomachine.proto"
+								     dest="${project.build.directory}/proto/ibc/lightclients/solomachine/v1"
+								     verbose="false"
+								     usetimestamp="true"/>
+								
+								<get src="https://raw.githubusercontent.com/cloverzrg/cosmos-sdk-java/main/src/main/java/proto/ibc/core/client/v1/client.proto"
+								     dest="${project.build.directory}/proto/ibc/core/client/v1/"
+								     verbose="false"
+								     usetimestamp="true"/>
+								
+								<get src="https://raw.githubusercontent.com/cosmos/cosmos-sdk/v0.50.4/proto/cosmos/bank/v1beta1/query.proto"
+								     dest="${project.build.directory}/proto/cosmos/bank/v1beta1"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cosmos/cosmos-sdk/v0.50.4/proto/cosmos/bank/v1beta1/bank.proto"
+								     dest="${project.build.directory}/proto/cosmos/bank/v1beta1"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cosmos/cosmos-sdk/main/proto/amino/amino.proto"
+								     dest="${project.build.directory}/proto/amino"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cosmos/cosmos-sdk/main/proto/cosmos/base/v1beta1/coin.proto"
+								     dest="${project.build.directory}/proto/cosmos/base/v1beta1"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cosmos/cosmos-sdk/main/proto/cosmos/query/v1/query.proto"
+								     dest="${project.build.directory}/proto/cosmos/query/v1"
+								     verbose="false"
+								     usetimestamp="true"/>
+                               
+								<get src="https://raw.githubusercontent.com/cosmos/cosmos-sdk/v0.50.4/proto/cosmos/crypto/multisig/v1beta1/multisig.proto"
+								     dest="${project.build.directory}/proto/cosmos/crypto/multisig/v1beta1"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cosmos/cosmos-sdk/v0.50.4/proto/cosmos/base/v1beta1/coin.proto"
+								     dest="${project.build.directory}/proto/cosmos/base/v1beta1"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cosmos/cosmos-sdk/v0.50.4/proto/cosmos/tx/signing/v1beta1/signing.proto"
+								     dest="${project.build.directory}/proto/cosmos/tx/signing/v1beta1"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cosmos/cosmos-proto/main/proto/cosmos_proto/cosmos.proto"
+								     dest="${project.build.directory}/proto/cosmos_proto"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cosmos/cosmos-sdk/main/proto/cosmos/msg/v1/msg.proto"
+								     dest="${project.build.directory}/proto/cosmos/msg/v1"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cosmos/cosmos-sdk/v0.50.4/proto/cosmos/base/query/v1beta1/pagination.proto"
+								     dest="${project.build.directory}/proto/cosmos/base/query/v1beta1"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cosmos/cosmos-sdk/v0.50.4/proto/cosmos/bank/v1beta1/tx.proto"
+								     dest="${project.build.directory}/proto/cosmos/bank/v1beta1"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/unigrid-project/cosmos-gridnode/master/proto/gridnode/gridnode/v1/tx.proto"
+								     dest="${project.build.directory}/proto/gridnode/gridnode/v1"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/unigrid-project/cosmos-gridnode/master/proto/gridnode/gridnode/v1/query.proto"
+								     dest="${project.build.directory}/proto/gridnode/gridnode/v1"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/unigrid-project/cosmos-gridnode/master/proto/gridnode/gridnode/v1/params.proto"
+								     dest="${project.build.directory}/proto/gridnode/gridnode/v1"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cosmos/gogoproto/main/gogoproto/gogo.proto"
+								     dest="${project.build.directory}/proto/gogoproto"
+								     verbose="false"
+								     usetimestamp="true"/>								
+								<get src="https://raw.githubusercontent.com/cosmos/cosmos-sdk/v0.50.4/proto/cosmos/staking/v1beta1/staking.proto"
+								     dest="${project.build.directory}/proto/cosmos/staking/v1beta1"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cosmos/cosmos-sdk/main/proto/cosmos/tx/v1beta1/tx.proto"
+								     dest="${project.build.directory}/proto/cosmos/tx/v1beta1"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cosmos/cosmos-sdk/main/proto/cosmos/tx/v1beta1/service.proto"
+								     dest="${project.build.directory}/proto/cosmos/tx/v1beta1"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cosmos/cosmos-sdk/main/proto/cosmos/base/abci/v1beta1/abci.proto"
+								     dest="${project.build.directory}/proto/cosmos/base/abci/v1beta1"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cometbft/cometbft/main/proto/tendermint/crypto/keys.proto"
+								     dest="${project.build.directory}/proto/tendermint/crypto"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cometbft/cometbft/main/proto/tendermint/crypto/proof.proto"
+								     dest="${project.build.directory}/proto/tendermint/crypto"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cometbft/cometbft/main/proto/tendermint/types/params.proto"
+								     dest="${project.build.directory}/proto/tendermint/types"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cometbft/cometbft/main/proto/tendermint/types/validator.proto"
+								     dest="${project.build.directory}/proto/tendermint/types"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cometbft/cometbft/main/proto/tendermint/abci/types.proto"
+								     dest="${project.build.directory}/proto/tendermint/abci"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cometbft/cometbft/main/proto/tendermint/types/block.proto"
+								     dest="${project.build.directory}/proto/tendermint/types"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cometbft/cometbft/main/proto/tendermint/types/types.proto"
+								     dest="${project.build.directory}/proto/tendermint/types"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cometbft/cometbft/main/proto/tendermint/version/types.proto"
+								     dest="${project.build.directory}/proto/tendermint/version"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cometbft/cometbft/main/proto/tendermint/types/evidence.proto"
+								     dest="${project.build.directory}/proto/tendermint/types"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cosmos/cosmos-sdk/v0.50.4/proto/cosmos/staking/v1beta1/tx.proto"
+								     dest="${project.build.directory}/proto/cosmos/staking/v1beta1"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cosmos/cosmos-sdk/v0.50.4/proto/cosmos/staking/v1beta1/staking.proto"
+								     dest="${project.build.directory}/proto/cosmos/staking/v1beta1"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cosmos/cosmos-sdk/main/proto/cosmos/crypto/secp256k1/keys.proto"
+								     dest="${project.build.directory}/proto/cosmos/crypto/secp256k1"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cosmos/cosmos-sdk/v0.50.4/proto/cosmos/auth/v1beta1/auth.proto"
+								     dest="${project.build.directory}/proto/cosmos/auth/v1beta1"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cosmos/cosmos-sdk/v0.50.4/proto/cosmos/auth/v1beta1/query.proto"
+								     dest="${project.build.directory}/proto/cosmos/auth/v1beta1"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cosmos/cosmos-sdk/v0.50.4/proto/cosmos/staking/v1beta1/query.proto"
+								     dest="${project.build.directory}/proto/cosmos/staking/v1beta1"
+								     verbose="false"
+								     usetimestamp="true"/>
+								<get src="https://raw.githubusercontent.com/cosmos/cosmos-sdk/v0.50.4/proto/cosmos/vesting/v1beta1/vesting.proto"
+								     dest="${project.build.directory}/proto/cosmos/vesting/v1beta1"
+								     verbose="false"
+								     usetimestamp="true"/>
+
+								
+							</target>
+						</configuration>
+
+
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.xolstice.maven.plugins</groupId>
+				<artifactId>protobuf-maven-plugin</artifactId>
+				<version>0.6.1</version>
+				<executions>
+                    
+					<execution>
+						<phase>process-sources</phase>
+						<goals>
+							<goal>compile</goal>
+							<goal>compile-custom</goal>
+						</goals>
+					</execution>
+                    
+				</executions>
+				<configuration>
+					<protoSourceRoot>${project.build.directory}/proto</protoSourceRoot>
+					<protocArtifact>com.google.protobuf:protoc:3.21.7:exe:${os.detected.classifier}</protocArtifact>
+					<pluginId>java.grpc</pluginId>
+					<pluginArtifact>io.grpc:protoc-gen-grpc-java:1.60.0:exe:${os.detected.classifier}</pluginArtifact>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>io.github.floverfelt</groupId>
+				<artifactId>find-and-replace-maven-plugin</artifactId>
+                                <version>1.1.0</version>
+				<executions>
+					<execution>
+						<id>exec-protobuf</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>find-and-replace</goal>
+						</goals>
+						<configuration>
+							<replacementType>file-contents</replacementType>
+							<baseDir>target/proto/gogoproto/</baseDir>
+							<findRegex>com\.google\.protobuf</findRegex>
+							<replaceValue>idiots.google.protobuf</replaceValue>
+							<recursive>true</recursive>
+						</configuration>
+					</execution>
+					<execution>
+						<id>exec</id>
+						<phase>process-sources</phase>
+						<goals>
+							<goal>find-and-replace</goal>
+						</goals>
+						<configuration>
+							<replacementType>file-contents</replacementType>
+							<baseDir>target/generated-sources/protobuf/</baseDir>
+							<findRegex>javax</findRegex>
+							<replaceValue>jakarta</replaceValue>
+							<recursive>true</recursive>
+							<fileMask>.java</fileMask>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>3.5.0</version>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${project.build.directory}/generated-sources/protobuf/java</source>
+								<source>${project.build.directory}/generated-sources/protobuf/java.grpc</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+                </plugins>
+    </build>
+</project>
