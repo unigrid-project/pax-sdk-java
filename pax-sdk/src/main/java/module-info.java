@@ -13,5 +13,6 @@
  */
 
 module fx {
-	requires static lombok;
+	//requires static lombok;
+	requires com.google.
 }
