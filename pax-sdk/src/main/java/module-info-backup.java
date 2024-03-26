@@ -10,9 +10,15 @@
  * addended copy of the GNU Affero General Public License with this program. If
  * not, see <http://www.gnu.org/licenses/> and
  * <https://github.com/unigrid-project/janus-java>.
- */
 
-module fx {
-	//requires static lombok;
-	requires com.google.
+module paxsdk {
+	requires utils;
+	requires static lombok;
+	requires protobuf.java.util;
+	requires grpc.core;
+	requires grpc.stub;
+	requires grpc.protobuf;
+	requires crypto;
+	requires grpc.api;
 }
+ */
