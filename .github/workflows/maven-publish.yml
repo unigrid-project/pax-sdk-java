@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      packages: write
 
     steps:
     - uses: actions/checkout@v3
@@ -19,16 +20,20 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-        server-id: ossrh # Server ID from your settings.xml
-        gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }} # Imported from GitHub secrets
-        gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }} # Imported from GitHub secrets
+
+    - name: Import GPG Key
+      uses: crazy-max/ghaction-import-gpg@v3
+      with:
+        gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+        passphrase: ${{ secrets.GPG_PASSPHRASE }}
 
     - name: Build with Maven
-      run: mvn clean install -B -P release --settings pax-sdk/settings.xml --file pax-sdk/pom.xml
-      env:
-        GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+      run: mvn clean install -B -P release --file pax-sdk/pom.xml
 
     - name: Sign and Deploy to OSSRH
       run: mvn deploy -B -P release --settings pax-sdk/settings.xml --file pax-sdk/pom.xml
       env:
+        GPG_EXECUTABLE: gpg
         GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+        OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }} 
