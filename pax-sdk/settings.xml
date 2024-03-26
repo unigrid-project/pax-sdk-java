@@ -1,30 +1,13 @@
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
-    <profiles>
-        <profile>
-            <id>github</id>
-            <repositories>
-                <repository>
-                    <id>central</id>
-                    <url>https://repo.maven.apache.org/maven2</url>
-                    <releases><enabled>true</enabled></releases>
-                    <snapshots><enabled>true</enabled></snapshots>
-                </repository>
-                 <repository>
-                    <id>github</id>
-                    <name>Unigrid Cosmos SDK Java Apache Maven Packages</name>
-                    <url>https://maven.pkg.github.com/unigrid-project/pax-sdk-java</url>
-                </repository>
-            </repositories>
-        </profile>
-    </profiles>
+    <!-- other profiles if needed -->
 
     <servers>
         <server>
-            <id>github</id>
-            <!-- No need for a username when using GITHUB_TOKEN -->
-            <password>${env.GITHUB_TOKEN}</password>
+            <id>ossrh</id>
+            <username>${env.OSSRH_USERNAME}</username>
+            <password>${env.OSSRH_PASSWORD}</password>
         </server>
     </servers>
 </settings>

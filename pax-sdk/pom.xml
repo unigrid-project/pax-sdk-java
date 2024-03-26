@@ -3,13 +3,32 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.unigrid</groupId>
 	<artifactId>pax-sdk</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<packaging>jar</packaging>
+	<!-- Project Information -->
+	<name>pax-sdk</name>
+	<description>A Java SDK to connect to the Unigrid Cosmos SDK Network</description>
+	<url>https://unigrid.org</url>
+	<!-- Developers Information -->
+	<developers>
+		<developer>
+			<id>dekm</id>
+			<name>Evan Green</name>
+			<email>info@unigrid.org</email>
+		</developer>
+	</developers>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
 	</properties>
+	<!-- MAVEN CENTRAL -->
+	<scm>
+		<url>https://github.com/unigrid-project/pax-sdk-java</url>
+		<connection>scm:git:git://github.com/unigrid-project/pax-sdk-java.git</connection>
+		<developerConnection>scm:git:ssh://github.com:unigrid-project/pax-sdk-java.git</developerConnection>
+	</scm>
+
 	<dependencies>
 		<!-- gRPC dependencies -->
 		<dependency>
@@ -93,20 +112,15 @@
 	<!-- MAVEN PUBLISH -->
     
 	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
 		<repository>
-			<id>github</id>
-			<name>GitHub Apache Maven Packages</name>
-			<url>https://maven.pkg.github.com/unigrid-project/pax-sdk-java</url>
+			<id>ossrh</id>
+			<url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
 	</distributionManagement>
-
-	<repositories>
-		<repository>
-			<id>github</id>
-			<name>Unigrid Cosmos SDK Java Apache Maven Packages</name>
-			<url>https://maven.pkg.github.com/unigrid-project/pax-sdk-java</url>
-		</repository>
-	</repositories>
     
 	<build>
 		<extensions>
@@ -565,6 +579,44 @@
 				<configuration>
 					<release>17</release>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

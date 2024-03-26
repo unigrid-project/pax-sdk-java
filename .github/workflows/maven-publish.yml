@@ -1,4 +1,4 @@
-name: Maven Package
+name: Maven Release Package
 
 on:
   release:
@@ -8,11 +8,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write
 
     steps:
     - uses: actions/checkout@v3
@@ -22,13 +21,14 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-        server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
-        settings-path: ${{ github.workspace }}/pax-sdk # location for the settings.xml file
+        server-id: ossrh # Server ID from your settings.xml
+        gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }} # Imported from GitHub secrets
+        gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }} # Imported from GitHub secrets
 
     - name: Build with Maven
-      run: mvn -B package -DskipTests --file pax-sdk/pom.xml
+      run: mvn clean install -B -P release --file pax-sdk/pom.xml
 
-    - name: Publish to GitHub Packages Apache Maven
-      run: mvn deploy -s pax-sdk/settings.xml --file pax-sdk/pom.xml
+    - name: Sign and Deploy to OSSRH
+      run: mvn deploy -B -P release --settings pax-sdk/settings.xml --file pax-sdk/pom.xml
       env:
-       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
