@@ -31,7 +31,7 @@ jobs:
       run: mvn clean install -B -P release --file pax-sdk/pom.xml
 
     - name: Sign and Deploy to OSSRH
-      run: mvn deploy -e -X -B -P release --settings pax-sdk/settings.xml --file pax-sdk/pom.xml
+      run: mvn deploy -e -B -P release --settings pax-sdk/settings.xml --file pax-sdk/pom.xml
       env:
         GPG_EXECUTABLE: gpg
         GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
