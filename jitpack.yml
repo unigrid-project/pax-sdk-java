@@ -3,3 +3,9 @@ jdk:
 
 submodules:
   - pax-sdk
+
+before_install:
+  - wget -qO- https://get.sdkman.io | bash
+  - source "$HOME/.sdkman/bin/sdkman-init.sh"
+  - sdk install maven 3.8.6
+  - mvn -v
