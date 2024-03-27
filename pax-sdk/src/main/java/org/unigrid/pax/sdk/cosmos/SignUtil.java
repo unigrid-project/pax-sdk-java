@@ -16,6 +16,7 @@
 
 package org.unigrid.pax.sdk.cosmos;
 
+import org.unigrid.pax.sdk.cosmos.service.GrpcService;
 import com.google.protobuf.Any;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.GeneratedMessageV3;

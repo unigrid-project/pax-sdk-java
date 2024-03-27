@@ -14,12 +14,14 @@
 	If not, see <http://www.gnu.org/licenses/> and <https://github.com/unigrid-project/janus-java>.
  */
 
-package org.unigrid.pax.sdk.cosmos;
+package org.unigrid.pax.sdk.cosmos.service;
 
+import org.unigrid.pax.sdk.cosmos.service.GrpcService;
 import com.google.protobuf.Any;
 import cosmos.auth.v1beta1.Auth;
 import cosmos.auth.v1beta1.QueryOuterClass;
 import jakarta.inject.Inject;
+import org.unigrid.pax.sdk.cosmos.SignUtil;
 import org.unigrid.pax.sdk.cosmos.model.ApiConfig;
 
 public class UnigridService {

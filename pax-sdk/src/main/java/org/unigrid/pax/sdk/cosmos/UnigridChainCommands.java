@@ -16,6 +16,7 @@
 
 package org.unigrid.pax.sdk.cosmos;
 
+import org.unigrid.pax.sdk.cosmos.service.UnigridService;
 import cosmos.base.abci.v1beta1.Abci;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;

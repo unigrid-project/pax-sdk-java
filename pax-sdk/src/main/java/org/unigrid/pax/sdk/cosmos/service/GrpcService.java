@@ -14,7 +14,7 @@
 	If not, see <http://www.gnu.org/licenses/> and <https://github.com/unigrid-project/janus-java>.
  */
 
-package org.unigrid.pax.sdk.cosmos;
+package org.unigrid.pax.sdk.cosmos.service;
 
 import org.unigrid.pax.sdk.cosmos.model.ApiConfig;
 import io.grpc.ManagedChannel;

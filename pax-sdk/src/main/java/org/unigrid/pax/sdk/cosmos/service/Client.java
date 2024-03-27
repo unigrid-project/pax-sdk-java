@@ -28,7 +28,6 @@ import java.security.PrivateKey;
 import java.security.Signature;
 import java.util.Base64;
 import org.unigrid.pax.sdk.cosmos.model.ApiConfig;
-import org.unigrid.pax.sdk.cosmos.GrpcService;
 import org.unigrid.pax.sdk.cosmos.model.transaction.GridnodeTransaction;
 import org.unigrid.pax.sdk.cosmos.model.transaction.TransactionResponse;
 
