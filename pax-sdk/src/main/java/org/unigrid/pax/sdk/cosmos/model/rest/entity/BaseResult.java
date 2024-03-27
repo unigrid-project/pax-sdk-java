@@ -12,33 +12,30 @@
 
 	You should have received an addended copy of the GNU Affero General Public License with this program.
 	If not, see <http://www.gnu.org/licenses/> and <https://github.com/unigrid-project/janus-java>.
- */
+*/
 
-package org.unigrid.pax.sdk.cosmos;
+package org.unigrid.pax.sdk.cosmos.model.rest.entity;
 
-import lombok.Getter;
-import org.bitcoinj.core.ECKey;
-import org.unigrid.pax.sdk.cosmos.utils.AddressUtil;
+import lombok.Data;
 
-@Getter
-public class UnigridCredentials {
-	private ECKey ecKey;
-	private String address;
+@Data
+public class BaseResult<T> {
+	private T result;
+	private ErrorResult error;
+	private String id;
 
-	private UnigridCredentials() {
-
+	protected BaseResult() {
+		/* Can only be instantiated during inheritance */
 	}
 
-	public static UnigridCredentials create(ECKey ecKey, String addressPrefix) {
-		System.out.println("cosmos credentials started");
-		UnigridCredentials credentials = new UnigridCredentials();
-		credentials.ecKey = ecKey;
-		credentials.address = AddressUtil.ecKeyToAddress(ecKey, addressPrefix);
-		return credentials;
+	@Data
+	public static class ErrorResult {
+		private int code;
+		private String message;
 	}
 
-	public static UnigridCredentials create(byte[] privateKey, String addressPrefix) {
-		ECKey ecKey = ECKey.fromPrivate(privateKey);
-		return create(ecKey, addressPrefix);
+	public boolean hasError() {
+		return (error != null);
 	}
 }
+
