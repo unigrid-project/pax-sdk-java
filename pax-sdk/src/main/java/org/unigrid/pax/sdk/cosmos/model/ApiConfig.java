@@ -15,8 +15,10 @@
  */
 package org.unigrid.pax.sdk.cosmos.model;
 
+import lombok.Data;
 import lombok.Getter;
 
+@Data
 public class ApiConfig {
 	@Getter
 	//private static final String BASE_URL = "https://rest-testnet.unigrid.org/";
