@@ -31,6 +31,8 @@ module paxsdk {
 	exports cosmos.crypto.secp256k1;
 	exports ibc.lightclients.tendermint.v1;
 	exports org.unigrid.pax.sdk.cosmos.service;
+	exports org.unigrid.pax.sdk.cosmos.model.transaction;
 	// Use opens if reflective access is needed (e.g., by CDI/Weld)
 	opens org.unigrid.pax.sdk.cosmos.service;
+	opens org.unigrid.pax.sdk.cosmos.model.transaction;
 }
