@@ -30,20 +30,7 @@
 		<developerConnection>scm:git:ssh://github.com:unigrid-project/pax-sdk-java.git</developerConnection>
 	</scm>
 
-	<repositories>
-		<repository>
-			<id>jitpack.io</id>
-			<url>https://jitpack.io</url>
-		</repository>
-	</repositories>
-
 	<dependencies>
-		<!-- JITPACK -->
-		<dependency>
-			<groupId>com.github.unigrid-project</groupId>
-			<artifactId>pax-sdk-java</artifactId>
-			<version>0.0.1</version>
-		</dependency>
 		<!-- gRPC dependencies -->
 		<dependency>
 			<groupId>com.google.api.grpc</groupId>
