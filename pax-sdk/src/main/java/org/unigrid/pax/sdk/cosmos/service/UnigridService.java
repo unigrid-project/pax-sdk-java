@@ -20,10 +20,15 @@ import org.unigrid.pax.sdk.cosmos.service.GrpcService;
 import com.google.protobuf.Any;
 import cosmos.auth.v1beta1.Auth;
 import cosmos.auth.v1beta1.QueryOuterClass;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.unigrid.pax.sdk.cosmos.SignUtil;
 import org.unigrid.pax.sdk.cosmos.model.ApiConfig;
+import org.unigrid.pax.sdk.cosmos.model.dto.UnbondingEntryDTO;
 
+@ApplicationScoped
 public class UnigridService {
 
 	@Inject
@@ -92,6 +97,24 @@ public class UnigridService {
 		double conversionFactor = 100000000.0;
 		double result = amount * conversionFactor;
 		return (long) result;
+	}
+
+	public List<UnbondingEntryDTO> getUnbondingEntries(String address) {
+		// Stub setup and request preparation
+		gridnode.gridnode.v1.QueryGrpc.QueryBlockingStub delegateStub = gridnode.gridnode.v1.QueryGrpc.newBlockingStub(grpcService.getChannel());
+		gridnode.gridnode.v1.QueryOuterClass.QueryUnbondingEntriesRequest unbondingRequest = gridnode.gridnode.v1.QueryOuterClass.QueryUnbondingEntriesRequest.newBuilder()
+			.setBondingAccountAddress(address)
+			.build();
+
+		// Get the response
+		gridnode.gridnode.v1.QueryOuterClass.QueryUnbondingEntriesResponse response = delegateStub.unbondingEntries(unbondingRequest);
+		return response.getUnbondingEntriesList().stream()
+			.map(protoEntry -> new UnbondingEntryDTO(
+			protoEntry.getAccount(),
+			protoEntry.getAmount(),
+			protoEntry.getCompletionTime()))
+			.collect(Collectors.toList());
+
 	}
 
 }
