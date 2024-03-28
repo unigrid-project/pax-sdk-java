@@ -13,7 +13,6 @@ import cosmos.bank.v1beta1.Tx.MsgSendResponse;
 import cosmos.base.v1beta1.CoinOuterClass.Coin;
 import io.grpc.StatusRuntimeException;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

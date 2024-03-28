@@ -32,8 +32,4 @@ public class PaxSdkInitializer {
     public UnigridService getUnigridService() {
         return unigridService;
     }
-   
-    
-
-    // Additional utility methods as needed
 }
