@@ -1,18 +1,29 @@
 package org.unigrid.pax.sdk.cosmos;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import org.unigrid.pax.sdk.cosmos.service.GrpcService;
 import org.unigrid.pax.sdk.cosmos.service.UnigridService;
 
 @ApplicationScoped
 public class PaxSdkInitializer {
-
-    @Inject
+    private static PaxSdkInitializer instance;
     private GrpcService grpcService;
-
-    @Inject
     private UnigridService unigridService;
+
+    private PaxSdkInitializer() {
+        // Initialize GrpcService
+        grpcService = new GrpcService();
+
+        // Initialize UnigridService with the GrpcService instance
+        unigridService = new UnigridService();
+    }
+
+    public static synchronized PaxSdkInitializer getInstance() {
+        if (instance == null) {
+            instance = new PaxSdkInitializer();
+        }
+        return instance;
+    }
 
     public GrpcService getGrpcService() {
         return grpcService;
@@ -21,4 +32,8 @@ public class PaxSdkInitializer {
     public UnigridService getUnigridService() {
         return unigridService;
     }
+   
+    
+
+    // Additional utility methods as needed
 }

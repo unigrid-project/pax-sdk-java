@@ -47,7 +47,6 @@ import gridnode.gridnode.v1.Tx.MsgGridnodeUndelegate;
 import java.util.List;
 import org.unigrid.pax.sdk.cosmos.model.SendInfo;
 
-
 public class SignUtil {
 
 	private final GrpcService grpcService;
@@ -57,7 +56,7 @@ public class SignUtil {
 	private final String chainId;
 
 	public SignUtil(GrpcService grpcService, long sequence, long accountNumber, String token, String chainId) {
-		this.grpcService = grpcService;
+		this.grpcService = PaxSdkInitializer.getInstance().getGrpcService();
 		this.sequence = sequence;
 		this.accountNumber = accountNumber;
 		this.token = token;

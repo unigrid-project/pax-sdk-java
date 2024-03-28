@@ -19,18 +19,24 @@ package org.unigrid.pax.sdk.cosmos.service;
 import com.google.protobuf.Any;
 import cosmos.auth.v1beta1.Auth;
 import cosmos.auth.v1beta1.QueryOuterClass;
+import cosmos.base.abci.v1beta1.Abci;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.bouncycastle.util.encoders.Hex;
+import org.unigrid.pax.sdk.cosmos.PaxSdkInitializer;
 import org.unigrid.pax.sdk.cosmos.SignUtil;
+import org.unigrid.pax.sdk.cosmos.UnigridCredentials;
 import org.unigrid.pax.sdk.cosmos.model.ApiConfig;
+import org.unigrid.pax.sdk.cosmos.model.SendInfo;
 import org.unigrid.pax.sdk.cosmos.model.dto.UnbondingEntryDTO;
 
 public class UnigridService {
 
 	private final GrpcService grpcService;
 
-	public UnigridService(GrpcService grpcService) {
-		this.grpcService = grpcService;
+	public UnigridService() {
+		this.grpcService = PaxSdkInitializer.getInstance().getGrpcService();
 	}
 
 	public SignUtil createSignUtilService(String address) {
@@ -114,6 +120,27 @@ public class UnigridService {
 			protoEntry.getCompletionTime()))
 			.collect(Collectors.toList());
 
+	}
+
+	public void sendTokens(String privateKeyHex, String toAddress, String fromAddress) throws Exception {
+		byte[] privateKey = Hex.decode(privateKeyHex);
+		UnigridCredentials credentials = UnigridCredentials.create(privateKey, "unigrid");
+
+
+		SignUtil transactionService = createSignUtilService(fromAddress);
+		long amountInUugd = convertBigDecimalInUugd(Double.parseDouble("100.00"));
+
+		System.out.println("amount in uugd: " + amountInUugd);
+
+		SendInfo sendMsg = SendInfo.builder()
+			.credentials(credentials)
+			.toAddress(toAddress)
+			.amountInAtom(amountInUugd)
+			.build();
+
+		Abci.TxResponse txResponse = transactionService.sendTx(credentials, sendMsg, new BigDecimal("0.000001"), 200000);
+		System.out.println("RESPONSE");
+		System.out.println(txResponse);
 	}
 
 }

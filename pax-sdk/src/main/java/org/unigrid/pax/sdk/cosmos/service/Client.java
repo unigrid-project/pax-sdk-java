@@ -1,3 +1,5 @@
+
+
 package org.unigrid.pax.sdk.cosmos.service;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -27,6 +29,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
 import java.security.Signature;
 import java.util.Base64;
+import org.unigrid.pax.sdk.cosmos.PaxSdkInitializer;
 import org.unigrid.pax.sdk.cosmos.model.ApiConfig;
 import org.unigrid.pax.sdk.cosmos.model.transaction.GridnodeTransaction;
 import org.unigrid.pax.sdk.cosmos.model.transaction.TransactionResponse;
@@ -34,9 +37,13 @@ import org.unigrid.pax.sdk.cosmos.model.transaction.TransactionResponse;
 @ApplicationScoped
 public class Client {
 
-	@Inject
-	GrpcService grpcService;
+	private final GrpcService grpcService;
 	private String apiUrl;
+
+	public Client() {
+		// Get GrpcService from the factory
+		this.grpcService = PaxSdkInitializer.getInstance().getGrpcService();
+	}
 
 	public String checkBalanceForAddress(String address) {
 		QueryBalanceRequest request = QueryBalanceRequest.newBuilder()
@@ -159,4 +166,3 @@ public class Client {
 		}
 	}
 }
-
