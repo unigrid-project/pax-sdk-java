@@ -16,23 +16,22 @@
 
 package org.unigrid.pax.sdk.cosmos.service;
 
-import org.unigrid.pax.sdk.cosmos.service.GrpcService;
 import com.google.protobuf.Any;
 import cosmos.auth.v1beta1.Auth;
 import cosmos.auth.v1beta1.QueryOuterClass;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.unigrid.pax.sdk.cosmos.SignUtil;
 import org.unigrid.pax.sdk.cosmos.model.ApiConfig;
 import org.unigrid.pax.sdk.cosmos.model.dto.UnbondingEntryDTO;
 
-@ApplicationScoped
 public class UnigridService {
 
-	@Inject
-	private GrpcService grpcService;
+	private final GrpcService grpcService;
+
+	public UnigridService(GrpcService grpcService) {
+		this.grpcService = grpcService;
+	}
 
 	public SignUtil createSignUtilService(String address) {
 		long sequence = getSequence(address);
